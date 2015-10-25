@@ -83,6 +83,10 @@ int main(int argc, char *argv[])
 		case '[':
 			if (top == limit) err("Nesting too deep.");
 			// Each loop gets two pclabels: at the beginning and end.
+			if(*(p+1)=='-' && *(p+2)==']'){
+                        	p = p+2;
+				|  mov   byte [PTR], 0
+                        }else{
 			// We store pclabel offsets in a stack to link the loop
 			// begin and end together.
 			maxpc += 2;
@@ -91,6 +95,7 @@ int main(int argc, char *argv[])
 			|  cmp  byte [PTR], 0
 			|  je   =>(maxpc-2)
 			|=>(maxpc-1):
+			}
 			break;
 		case ']':
 			if (top == pcstack) err("Unmatched ']'");
